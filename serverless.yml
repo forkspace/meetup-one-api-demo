@@ -6,11 +6,45 @@ provider:
   stage: development
   region: eu-west-1
   environment: ${file(env.${opt:stage, self:provider.stage}.yml)}
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "dynamodb:Scan"
+      Resource: "*"
 
 functions:
   getMeetups:
     handler: meetups.getMeetups
-
+    events:
+    - http:
+        path: meetups
+        method: get
+        cors:
+          origins:
+            - '*'
+          headers:
+            - Content-Type
+            - X-Amz-Date
+            - Authorization
+            - X-Api-Key
+            - X-Amz-Security-Token
+          allowCredentials: false
+  createMeetup:
+    handler: meetups.createMeetup
+    events:
+        - http:
+            path: createMeetup
+            method: post
+            cors:
+              origins:
+                - '*'
+              headers:
+                - Content-Type
+                - X-Amz-Date
+                - Authorization
+                - X-Api-Key
+                - X-Amz-Security-Token
+              allowCredentials: false
 resources:
   Resources:
     MediaTable:
@@ -20,12 +54,12 @@ resources:
         AttributeDefinitions:
           - AttributeName: meetupId
             AttributeType: S
-          - AttributeName: userId
+          - AttributeName: locationId
             AttributeType: S
         KeySchema:
           - AttributeName: meetupId
             KeyType: HASH
-          - AttributeName: userId
+          - AttributeName: locationId
             KeyType: RANGE
         ProvisionedThroughput:
           ReadCapacityUnits: 1
