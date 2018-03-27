@@ -2,6 +2,10 @@
   "dependencies": {
     "aws-sdk": "^2.212.1",
     "dynogels": "^9.0.0",
-    "joi": "^13.1.2"
+    "joi": "^13.1.2",
+    "serverless": "^1.26.1"
+  },
+  "devDependencies": {
+    "serverless-offline": "^3.18.0"
   }
 }

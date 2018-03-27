@@ -1,5 +1,5 @@
 const dynogels = require('dynogels');
-const joi = require('joi');
+const Joi = require('joi');
 
 const STAGE = process.env.STAGE;
 const REGION = process.env.REGION;
@@ -11,15 +11,16 @@ dynogels.AWS.config.update({
 
 const Meetups = dynogels.define('meetups', {
   hashKey: 'meetupId',
-  rangeKey: 'locationId',
   timestamps: true,
   schema: {
     meetupId: dynogels.types.uuid(),
-    locationId: joi.string(),
-    attendants: joi.number(),
-    title: joi.string(),
-    description: joi.string(),
-    createdBy: joi.string()
+    location: Joi.string(),
+    attendants: Joi.number(),
+    title: Joi.string(),
+    description: Joi.string(),
+    createdBy: Joi.string(),
+    date: Joi.string(),
+    time: Joi.string()
   }
 });
 

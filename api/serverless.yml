@@ -11,40 +11,43 @@ provider:
       Action:
         - "dynamodb:Scan"
       Resource: "*"
+    - Effect: "Allow"
+      Action:
+        - "dynamodb:PutItem"
+      Resource: "*"
+    - Effect: "Allow"
+      Action:
+        - "dynamodb:DeleteItem"
+      Resource: "*"
+plugins:
+  - serverless-offline
 
 functions:
   getMeetups:
     handler: meetups.getMeetups
     events:
     - http:
-        path: meetups
+        path: meetup
         method: get
-        cors:
-          origins:
-            - '*'
-          headers:
-            - Content-Type
-            - X-Amz-Date
-            - Authorization
-            - X-Api-Key
-            - X-Amz-Security-Token
-          allowCredentials: false
+        cors: true
   createMeetup:
     handler: meetups.createMeetup
     events:
-        - http:
-            path: createMeetup
-            method: post
-            cors:
-              origins:
-                - '*'
-              headers:
-                - Content-Type
-                - X-Amz-Date
-                - Authorization
-                - X-Api-Key
-                - X-Amz-Security-Token
-              allowCredentials: false
+    - http:
+        path: meetup
+        method: post
+        cors: true
+  deleteMeetup:
+    handler: meetups.deleteMeetup
+    events:
+    - http:
+        path: meetup/{id}
+        method: delete
+        cors: true
+        request:
+          parameters:
+            paths:
+              id: true
 resources:
   Resources:
     MediaTable:
@@ -54,13 +57,9 @@ resources:
         AttributeDefinitions:
           - AttributeName: meetupId
             AttributeType: S
-          - AttributeName: locationId
-            AttributeType: S
         KeySchema:
           - AttributeName: meetupId
             KeyType: HASH
-          - AttributeName: locationId
-            KeyType: RANGE
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1

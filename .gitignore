@@ -31,3 +31,5 @@ node_modules
 \.serverless/
 
 \.vscode/
+
+client/\.env
